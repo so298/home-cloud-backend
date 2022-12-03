@@ -81,5 +81,9 @@ apiRouter.post("/devices/wol/", (req, res, next) => {
   res.status(404).json({ status: "Invalid mac address" });
 });
 
+// configure routers
 app.use("/api/", apiRouter);
-app.use(express.static("./client_build"))
+app.use(express.static(__dirname + "/client_build"));
+app.get("*", (req, res) => {
+  res.sendFile(__dirname + "/client_build/index.html");
+});

@@ -1,11 +1,11 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "src/main.js",
+  "main": "main.js",
   "license": "MIT",
   "author": "Sosuke Hosokawa",
   "scripts": {
-    "start": "node src/main.js"
+    "start": "node main.js"
   },
   "dependencies": {
     "@types/ping": "^0.4.1",
