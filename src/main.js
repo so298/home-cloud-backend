@@ -6,7 +6,8 @@ const { exec } = require("child_process");
 const app = express();
 app.use(bodyParser.json());
 
-const deviceData = JSON.parse(fs.readFileSync("data/device.json", "utf-8"));
+const deviceJsonPath = "data/device.json";
+let deviceData = JSON.parse(fs.readFileSync(deviceJsonPath, "utf-8"));
 
 const server = app.listen(4000, () => {
   const addr = server.address();
@@ -20,6 +21,13 @@ console.info(deviceData);
 app.get("/devices", (req, res, next) => {
   console.info(`[get]: /devices`);
   res.json(deviceData);
+});
+
+// reload device.json
+app.post("/devices/reload", (req, res, next) => {
+  console.info("[post]: /devices/reload reload devices");
+  deviceData = JSON.parse(fs.readFileSync(deviceJsonPath, "utf-8"));
+  res.status(200).json(deviceData);
 });
 
 // call wake on lan command
