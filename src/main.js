@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // load device data
-const deviceJsonPath = "data/device.json";
+const deviceJsonPath = process.env.DEVICE_JSON_PATH || "data/device.json";
 let deviceData = loadDeviceData(deviceJsonPath);
 
 // set get device data
