@@ -36,7 +36,7 @@ setInterval(() => {
   updateDeviceStatus();
 }, updateDeviceInterval);
 
-const server = app.listen(4000, () => {
+const server = app.listen(3000, () => {
   const addr = server.address();
   console.info(`Server listening on ${addr.address}:${addr.port}`);
 });
