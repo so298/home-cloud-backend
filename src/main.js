@@ -1,13 +1,15 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const fs = require("fs");
+const cors = require("cors");
 const { exec } = require("child_process");
+const { loadDeviceData } = require("./util");
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());
 
 const deviceJsonPath = "data/device.json";
-let deviceData = JSON.parse(fs.readFileSync(deviceJsonPath, "utf-8"));
+let deviceData = loadDeviceData(deviceJsonPath);
 
 const server = app.listen(4000, () => {
   const addr = server.address();
@@ -26,7 +28,7 @@ app.get("/devices", (req, res, next) => {
 // reload device.json
 app.post("/devices/reload", (req, res, next) => {
   console.info("[post]: /devices/reload reload devices");
-  deviceData = JSON.parse(fs.readFileSync(deviceJsonPath, "utf-8"));
+  deviceData = loadDeviceData(deviceJsonPath);
   res.status(200).json(deviceData);
 });
 
