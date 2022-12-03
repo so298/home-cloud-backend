@@ -2,14 +2,36 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const { exec } = require("child_process");
+const ping = require("ping");
 const { loadDeviceData } = require("./util");
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+// load device data
 const deviceJsonPath = "data/device.json";
 let deviceData = loadDeviceData(deviceJsonPath);
+
+// set get device data
+const updateDeviceInterval = 5 * 1000;
+const updateDeviceStatus = () => {
+  const pingConfig = {
+    timeout: 0.1,
+  };
+  deviceData.forEach((elem, idx) => {
+    ping.sys.probe(elem.localip, (isAlive) => {
+      if (isAlive) {
+        deviceData[idx].status = "acitive";
+      } else {
+        deviceData[idx].status = "down";
+      }
+    }, pingConfig);
+  });
+};
+setInterval(() => {
+  updateDeviceStatus();
+}, updateDeviceInterval);
 
 const server = app.listen(4000, () => {
   const addr = server.address();
