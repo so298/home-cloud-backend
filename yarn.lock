@@ -501,3 +501,8 @@ vary@^1, vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
+
+wol@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/wol/-/wol-1.0.7.tgz#a2e70efca2a28324a744a5d12331d359da470ff7"
+  integrity sha512-kg7ETY8g3V5+3GVhUfWCVjeXuCmfrX6xfw4cw4c88+MtoxkbFmcs9Y5yhT1wwOL8inogFUQZ8JMzH9OekaaawQ==

@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const { exec } = require("child_process");
+const wol = require("wol");
 const ping = require("ping");
 const { loadDeviceData } = require("./util");
 
@@ -20,13 +20,17 @@ const updateDeviceStatus = () => {
     timeout: 0.1,
   };
   deviceData.forEach((elem, idx) => {
-    ping.sys.probe(elem.localip, (isAlive) => {
-      if (isAlive) {
-        deviceData[idx].status = "acitive";
-      } else {
-        deviceData[idx].status = "down";
-      }
-    }, pingConfig);
+    ping.sys.probe(
+      elem.localip,
+      (isAlive) => {
+        if (isAlive) {
+          deviceData[idx].status = "acitive";
+        } else {
+          deviceData[idx].status = "down";
+        }
+      },
+      pingConfig
+    );
   });
 };
 setInterval(() => {
@@ -65,15 +69,12 @@ app.post("/devices/wol/", (req, res, next) => {
 
   for (device of deviceData) {
     if (device.mac == reqDevice.mac) {
-      // TODO: change command to wol
-      exec(`echo ${reqDevice.mac}`, (err, stdout, stderr) => {
+      wol.wake(reqDevice.mac, (err) => {
         if (err) {
-          res
-            .status(404)
-            .json({ status: "Exec command failed", stdout, stderr, err });
+          res.status(404).json({ status: "Exec command failed" });
           return;
         }
-        res.status(200).json({ status: "Success wol", stdout, stderr, err });
+        res.status(200).json({ status: "Success wol" });
       });
       return;
     }
