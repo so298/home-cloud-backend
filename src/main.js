@@ -1,13 +1,12 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const cors = require("cors");
 const wol = require("wol");
 const ping = require("ping");
 const { loadDeviceData } = require("./util");
 
 const app = express();
+const apiRouter = express.Router();
 app.use(bodyParser.json());
-app.use(cors());
 
 // load device data
 const deviceJsonPath = process.env.DEVICE_JSON_PATH || "data/device.json";
@@ -46,20 +45,20 @@ console.info("### registered devices ###");
 console.info(deviceData);
 
 // returns devices info
-app.get("/devices", (req, res, next) => {
+apiRouter.get("/devices", (req, res, next) => {
   console.info(`[get]: /devices`);
   res.json(deviceData);
 });
 
 // reload device.json
-app.post("/devices/reload", (req, res, next) => {
+apiRouter.post("/devices/reload", (req, res, next) => {
   console.info("[post]: /devices/reload reload devices");
   deviceData = loadDeviceData(deviceJsonPath);
   res.status(200).json(deviceData);
 });
 
 // call wake on lan command
-app.post("/devices/wol/", (req, res, next) => {
+apiRouter.post("/devices/wol/", (req, res, next) => {
   console.info(`[post]: /devices/wol/`);
   console.info(req.body);
   const reqDevice = req.body;
@@ -81,3 +80,6 @@ app.post("/devices/wol/", (req, res, next) => {
   }
   res.status(404).json({ status: "Invalid mac address" });
 });
+
+app.use("/api/", apiRouter);
+app.use(express.static("./client_build"))

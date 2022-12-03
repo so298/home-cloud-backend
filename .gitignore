@@ -131,3 +131,6 @@ dist
 
 # JSON data
 data/
+
+# static client build
+client_build/
